@@ -1,0 +1,19 @@
+services:
+  runner:
+    image: jass/github-runner:22.04-2.330.0
+    restart: always
+    environment:
+      - REPO=${GITHUB_REPO}
+      - TOKEN=${GITHUB_TOKEN}
+      - RUNNER_PREFIX=${HOSTNAME}_
+      - RUNNER_LABELS=${HOSTNAME},docker
+    deploy:
+      mode: replicated
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.35"
+          memory: 300M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
