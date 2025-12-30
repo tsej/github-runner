@@ -7,6 +7,14 @@ services:
       - TOKEN=${GITHUB_TOKEN}
       - RUNNER_PREFIX=${HOSTNAME}_
       - RUNNER_LABELS=${HOSTNAME},docker
+    volumes:
+      # Mount host Docker socket - this is the insecure but simple approach
+      - /var/run/docker.sock:/var/run/docker.sock
+    user: github
+    group_add:
+      # Add the docker group - you may need to adjust the GID to match your host
+      # Use `getent group docker` on your host to find the correct GID
+      - "${DOCKER_GID:-986}"
     deploy:
       mode: replicated
       replicas: 1
